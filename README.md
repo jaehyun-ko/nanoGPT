@@ -309,3 +309,6 @@ DUKE OF YORK:
 It is strange, my lord, that I should ride
 ---------------
 ```
+
+# 코드 관련
+개인적으로는 configurator.py를 통해 입력받은 인자에서 직접 기존의 인자들을 업데이트하는 방식이 흥미로웠다. 이를 기반으로 기존 코드들을 개선할 수 있을 듯하다.
