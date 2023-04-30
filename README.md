@@ -33,10 +33,20 @@ out_dir = 'out-shakespeare'+ wandb_run_name
 gpt2-xl을 사용했을 때, 인공지능학과 A100 40GB 환경에서의 모델 파인튜닝이 불가능하였다.
 따라서 GPT2-Large(774m)을 배치 사이즈를 달리하여 파인튜닝 진행하였다.
 
-
-# mfu
+# 결과 분석
+## MFU
 
 "Model Flops Utilization"은 딥 러닝 모델에서 효율적인 연산을 위해 계산되는 플로팅 연산(FLOPS)의 비율을 나타내는 지표이다. 
-FLOPS는 초당 부동 소수점 연산 횟수를 의미하는데, 딥 러닝 모델의 복잡도를 측정하는 데 사용된다.
+![mfu](assets/mfu.png)
+FLOPS는 초당 부동 소수점 연산 횟수를 의미하는데, 딥 러닝 모델의 복잡도를 측정하는 데 사용된다.\
 Model Flops Utilization은 모델이 계산하는 FLOPS 중에서 실제로 사용되는 비율이다. 높은 Flops Utilization은 모델이 효율적으로 동작하고 있음을 나타내며, 낮은 Flops Utilization은 모델이 일부 연산에서 불필요한 계산을 하고 있거나, 다른 문제가 발생하고 있을 수 있다는 의미이다. \
-두 batch size에서의 flops utilization은 
+두 batch size에서의 flops utilization은 6에폭째에서 상승함을 알 수 있는데, 배치사이즈가 더 큰 모델에서의 utilization이 높음을 확인할 수 있다.
+
+
+## LOSS
+학습 과정에 따른 loss 변화는 아래와 같으며, 배치사이즈가 더 큰 경우에서 더 좋은 성능을 보이는 것을 확인할 수 있다. 이는 큰 배치 사이즈가 layer normalization에 따른 효과를 더 잘 받기 때문이다.
+![train_loss](assets/train_loss.png)
+![validation_loss](assets/val_loss.png)
+
+## sample
+
