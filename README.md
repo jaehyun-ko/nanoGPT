@@ -30,8 +30,14 @@ out_dir = 'out-shakespeare'+ wandb_run_name
 ```
 
 # 실험 세팅
+## Pretrained model
 gpt2-xl을 사용했을 때, 인공지능학과 A100 40GB 환경에서의 모델 파인튜닝이 불가능하였다.
 따라서 GPT2-Large(774m)을 배치 사이즈를 달리하여 파인튜닝 진행하였다.
+## 개발 환경 설정
+A100 40GB \
+torch 2.0(for torch.compile) \
+other settings are in [requirements.txt](requirements.txt)
+
 
 # 결과 분석
 ## MFU
@@ -44,9 +50,262 @@ Model Flops Utilization은 모델이 계산하는 FLOPS 중에서 실제로 사�
 
 
 ## LOSS
-학습 과정에 따른 loss 변화는 아래와 같으며, 배치사이즈가 더 큰 경우에서 더 좋은 성능을 보이는 것을 확인할 수 있다. 이는 큰 배치 사이즈가 layer normalization에 따른 효과를 더 잘 받기 때문이다.
+학습 과정에 따른 loss 변화는 아래와 같으며, 배치사이즈가 더 큰 경우에서 validation loss 측면에서 더 안정적인 학습이 진행되는 것을 확인할 수 있다. 이는 큰 배치 사이즈가 layer normalization에 따른 효과를 더 잘 받기 때문이다.
 ![train_loss](assets/train_loss.png)
 ![validation_loss](assets/val_loss.png)
 
 ## sample
 
+### pure gpt2-large model
+```bash
+python sample.py \
+    --init_from=gpt2-large \
+    --start="What is the answer to life, the universe, and everything?" \
+    --num_samples=5 --max_new_tokens=100
+```
+the output is:
+
+```
+What is the answer to life, the universe, and everything?
+
+Submit your answer to this riddle below for a chance to win a $25 Amazon gift card!
+
+Answers can be found here!<|endoftext|>Please fill in the form below.
+
+When will I receive my order?
+
+After placing your order you will receive an email with the tracking number.
+
+What is the shipping cost to me?
+
+We ship via USPS Priority Mail. To find a tracking number you can access our shipping page.
+
+Where can I
+---------------
+What is the answer to life, the universe, and everything? Probably nothing. Try to answer these questions with the facts and data that prove the existence of God. Then see if it is really true that the universe exists because of one supernatural being or because of a multitude of supernatural beings.<|endoftext|>C# Script
+
+Description
+
+This script is used to see how the user interacts with the cmdlets in the C# language.
+
+The script uses the C# language, so it will only run on Windows.
+
+This is an example of a
+---------------
+What is the answer to life, the universe, and everything?
+
+
+Can a man be compassionate, just, and kind if he is not sure of what he has got?
+
+
+Do we care what happens if one child is born and the second and third children don't go to school, or if they never go to school?
+
+
+We don't know what the future holds, and we don't know what the future holds for us.
+
+
+We are doing all we can to make sure the children go to school. Only by giving them the
+---------------
+What is the answer to life, the universe, and everything? Just be yourself! You are gorgeous, you are smart, you are funny, you are smart and you are beautiful. See YOURSELF in the mirror every morning. Discover YOURSELF through the things I do. See YOURSELF in the people I'm with. See YOURSELF in the food I eat. See YOURSELF on the street. See YOURSELF in the people I meet. See YOURSELF in everything. Because we are beautiful. Because we are smart.
+---------------
+What is the answer to life, the universe, and everything? This question has been posed in many religions, including Buddhism, Christianity, Hinduism, Islam, and Judaism (to name a few). But how can a religion answer a question that has no simple answer?
+
+We seek an answer to this question by examining the nature of religion and why it seems to be an issue that is difficult to answer.
+
+What is the nature of religion?
+
+Religion is an unverifiable, all-encompassing (or all-pervasive
+---------------
+```
+
+### batch 8, finetune-gpt-2 large
+```bash
+python sample.py \
+    --start="What is the answer to life, the universe, and everything?" \
+    --num_samples=5 --max_new_tokens=100
+```
+outputs are:
+```
+Overriding: start = What is the answer to life, the universe, and everything?
+Overriding: num_samples = 5
+Overriding: max_new_tokens = 100
+number of parameters: 772.72M
+No meta.pkl found, assuming GPT-2 encodings...
+What is the answer to life, the universe, and everything?
+Why, the world's answer to life, for so it wants
+A living heart and a living tongue.
+An' is that the way to live, the universe, and everything:
+I have the mind to know the answer to life, the universe,
+And every thing that I have to say.
+
+PHILIP:
+Come, I'll serve your turn;
+For I'm no longer a mere waiter.
+
+LUCIO:
+I'll serve your
+---------------
+What is the answer to life, the universe, and everything?
+
+We are all dead to thought.
+
+DUKE VINCENTIO:
+My Lord of Gaunt
+Is a man of very strange thoughts: but
+Methinks he hath some hidden treasure hid
+For such moments as, with his penitent heart,
+He would live to see.
+
+LORD OTHERS:
+Now, see thou do, Lord Duke.
+
+DUKE VINCENTIO:
+I pray you, good my Lord
+---------------
+What is the answer to life, the universe, and everything?
+
+
+CHAP. I defy the gods! I have no end.
+
+
+SICINIUS:
+In the world, you are for ever childless, and therefore I am a joy to you.
+
+
+MONTAGUE:
+If you be a joy
+To me, what wonder was it that you'd give up the world?
+
+
+SICINIUS:
+Was that my part? though I be a joy to you,
+I'll not be a
+---------------
+What is the answer to life, the universe, and everything?
+One word: to make you love.
+
+PRINCE EDWARD:
+I believe in no other answer.
+
+KING RICHARD III:
+Good heart, be not troubled with I know not.
+
+PRINCE EDWARD:
+If thou wilt love, be patient.
+
+KING RICHARD III:
+Then be patient; I know not how, my love,
+Or how thou shouldst love.
+
+PRINCE EDWARD:
+---------------
+What is the answer to life, the universe, and everything?
+Do not give your minds in reply;
+But, for ourselves, give your hearts, and not your minds.
+
+MENENIUS:
+I have been often at the pains of giving
+my minds.
+
+KIRK:
+There is now no beginning to it.
+
+MENENIUS:
+Are you not right?
+
+KIRK:
+I am not wronged, but I am right.
+
+MENENIUS:
+No
+---------------
+```
+### batch 1, finetune-gpt-2 large
+```
+Overriding: start = What is the answer to life, the universe, and everything?
+Overriding: num_samples = 5
+Overriding: max_new_tokens = 100
+number of parameters: 772.72M
+No meta.pkl found, assuming GPT-2 encodings...
+What is the answer to life, the universe, and everything?
+Does any one yet know?
+
+GIROLLE:
+Sir, if you will,
+I will tell you. Look here, sir,
+I tell you what I know, for I am
+the priest of the inquisition.
+
+CONSTANCE:
+By the good master, I shall:
+I am the queen's daughter, and hence I send
+the friar:
+
+ALICE:
+Then it was your father;
+
+
+GIR
+---------------
+What is the answer to life, the universe, and everything?
+Strive on, fight on, for there's nothing to lose but life!
+Here's a little treasure; a little rest, an hour's stay.
+
+BENVOLIO:
+Since then, though now you have come, you have certainly
+walked. There's no doubt but you have done it: the sun has
+been darkened, and that's a sign that death pursues,
+as we say. With my heart I vow,
+You shall not be
+---------------
+What is the answer to life, the universe, and everything?
+
+
+CHAP.
+I will tell you the answer. Lay me down to sleep.
+Lay me down, my sweet, my kind, my loving soul,
+And I'll tell you the universe.
+
+WOLF:
+In morning, the day of heaven,
+Come along, come along, my son, draw me,
+And I'll tell thee the day of hell.
+
+CHAP.
+I will tell thee, my child: it is of the
+---------------
+What is the answer to life, the universe, and everything?
+One word: "The devil."
+
+KING RICHARD II:
+Pray you, if I were a devil,
+I would take you by the hand and fly;
+When you have done, I shall take your life.
+
+CROMWELL:
+My lord!
+
+KING RICHARD II:
+I know your wit; trust me, I'll give you
+your reward.
+
+CROMWELL:
+My lord, you are on
+---------------
+What is the answer to life, the universe, and everything?
+Do not give your minds in a sense to our riddle,
+Or your bodies to our perplexity, and your minds
+To our perplexity.
+
+Enter DEDICATION.
+
+DUKE OF YORK:
+Hail, cousin! I will make you look on pretty fair.
+
+POPE:
+Now, my lord, I will ask no more.
+
+DUKE OF YORK:
+It is strange, my lord, that I should ride
+---------------
+```
